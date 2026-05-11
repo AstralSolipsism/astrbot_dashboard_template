@@ -1,0 +1,18 @@
+{
+  "id": "astrbot-dashboard-template",
+  "name": "AstrBot Dashboard Template",
+  "description": "A standalone dashboard template extracted from the MOD Manager PR branch for AstrBot Dashboard Market validation.",
+  "authors": [
+    {
+      "name": "AstralSolipsism",
+      "url": "https://github.com/AstralSolipsism"
+    }
+  ],
+  "sourceRepo": "https://github.com/AstralSolipsism/astrbot_dashboard_template",
+  "license": "AGPL-3.0",
+  "homepage": "https://github.com/AstralSolipsism/astrbot_dashboard_template",
+  "tags": ["template", "mod-manager", "vue"],
+  "media": {
+    "screenshots": []
+  }
+}

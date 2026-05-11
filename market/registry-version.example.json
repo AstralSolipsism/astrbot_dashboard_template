@@ -1,0 +1,37 @@
+{
+  "id": "astrbot-dashboard-template",
+  "version": "0.1.0",
+  "source": {
+    "repo": "https://github.com/AstralSolipsism/astrbot_dashboard_template",
+    "ref": "v0.1.0",
+    "directory": ".",
+    "packageManager": "pnpm",
+    "build": "pnpm build",
+    "dist": "dist"
+  },
+  "artifact": {
+    "url": "https://github.com/AstralSolipsism/astrbot_dashboard_template/releases/download/v0.1.0/astrbot-dashboard-template-dist.zip",
+    "sha256": "e10ff6c88ab54597bdf25e69f7b9994748d9b47f7836937060ad453d9b149f84",
+    "size": 9717207
+  },
+  "compatibility": {
+    "astrbot": ">=4.24.2 <4.25.0",
+    "contract": "astrbot-dashboard-contract@v4.24.2"
+  },
+  "security": {
+    "externalDomains": ["cdn.jsdelivr.net"],
+    "pluginApiDependencies": ["alkaid", "url_2_kb"]
+  },
+  "verification": {
+    "status": "pending",
+    "report": "Initial local submission candidate extracted from the MOD Manager PR branch.",
+    "coverage": {
+      "contract": "astrbot-dashboard-contract@v4.24.2",
+      "status": "pending",
+      "requiredCapabilities": 20,
+      "coveredCapabilities": 0,
+      "requiredApis": 71,
+      "coveredApis": 0
+    }
+  }
+}
