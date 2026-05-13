@@ -1,0 +1,28 @@
+{
+  "id": "astrbot-dashboard-template",
+  "name": "AstrBot Dashboard Template",
+  "description": "A Vuetify-based AstrBot dashboard template with contract markers for market validation.",
+  "authors": [
+    {
+      "name": "CodedThemes"
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/AstralSolipsism/astrbot_dashboard_template",
+  "tags": ["template", "vuetify"],
+  "version": "0.1.0",
+  "compatibility": {
+    "astrbot": ">=4.24.2 <4.25.0",
+    "contract": "astrbot-dashboard-contract@v4.24.2"
+  },
+  "security": {
+    "externalDomains": ["cdn.jsdelivr.net"],
+    "pluginApiDependencies": ["alkaid", "url_2_kb"]
+  },
+  "artifact": {
+    "type": "build",
+    "packageManager": "pnpm",
+    "build": "pnpm install --frozen-lockfile && pnpm build",
+    "dist": "dist"
+  }
+}
