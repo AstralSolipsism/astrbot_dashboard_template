@@ -2,7 +2,7 @@
   "name": "astrbot-dashboard-template",
   "version": "0.1.0",
   "private": true,
-  "author": "CodedThemes",
+  "author": "AstralSolipsism",
   "scripts": {
     "dev": "vite --host",
     "subset-icons": "node scripts/subset-mdi-font.mjs",
