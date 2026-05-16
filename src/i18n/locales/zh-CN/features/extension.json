@@ -439,7 +439,19 @@
       "config": "配置",
       "overview": "文档",
       "changelog": "更新日志",
-      "reserved": "扩展区"
+      "pluginWebUI": "插件WebUI"
+    },
+    "pluginWebUI": {
+      "actions": {
+        "retry": "重试"
+      },
+      "empty": {
+        "title": "该插件未提供 WebUI",
+        "subtitle": "插件需要提供 pages/<page_name>/index.html 才会在这里显示。"
+      },
+      "errors": {
+        "loadFailed": "加载插件 WebUI 失败"
+      }
     },
     "welcome": {
       "title": "欢迎使用 AstrBot 插件管理器",

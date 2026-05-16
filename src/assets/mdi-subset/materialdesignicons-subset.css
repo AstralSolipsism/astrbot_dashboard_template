@@ -1,4 +1,4 @@
-/* Auto-generated MDI subset – 280 icons */
+/* Auto-generated MDI subset – 282 icons */
 /* Do not edit manually. Run: pnpm run subset-icons */
 
 @font-face {
@@ -760,6 +760,10 @@
   content: "\F0A07";
 }
 
+.mdi-monitor-off::before {
+  content: "\F0D90";
+}
+
 .mdi-music-note-outline::before {
   content: "\F0F74";
 }
@@ -858,6 +862,10 @@
 
 .mdi-pound::before {
   content: "\F0423";
+}
+
+.mdi-power-plug-off-outline::before {
+  content: "\F1424";
 }
 
 .mdi-progress-check::before {

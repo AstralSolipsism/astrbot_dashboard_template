@@ -2,7 +2,9 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 import { usePluginConfigCache } from '@/composables/usePluginConfigCache'
+import { usePluginPageMetadataCache } from '@/composables/usePluginPageMetadataCache'
 import type { InstalledViewMode, PluginSummary } from './types'
+import { getPluginWebUIPrefetchNames } from './pluginWebUIPrefetch'
 
 import ModTopToolbar from './ModTopToolbar.vue'
 import ResizableSplitPane from './ResizableSplitPane.vue'
@@ -70,7 +72,9 @@ const rightPaneRatio = ref(0.5)
 const shouldAutoFitMainSplit = ref(false)
 const hasAutoFitMainSplit = ref(false)
 
-const cache = usePluginConfigCache()
+const configCache = usePluginConfigCache()
+const pageMetadataCache = usePluginPageMetadataCache()
+const previousPluginState = ref<Map<string, string>>(new Map())
 
 const selectedPlugin = computed<PluginSummary | null>(() => {
   const name = selectedPluginName.value
@@ -87,6 +91,22 @@ const selectedActivePlugins = computed<PluginSummary[]>(() => {
   const names = new Set(selectedActiveNames.value ?? [])
   return (props.plugins ?? []).filter((p) => names.has(p.name))
 })
+
+const pluginStateSnapshot = computed(() => {
+  const snapshot = new Map<string, string>()
+  ;(props.plugins ?? []).forEach((plugin) => {
+    snapshot.set(plugin.name, `${plugin.activated ? 1 : 0}:${plugin.version || ''}`)
+  })
+  return snapshot
+})
+
+const pluginWebUIPrefetchNames = computed(() =>
+  getPluginWebUIPrefetchNames(
+    props.plugins ?? [],
+    selectedPluginName.value,
+    props.pinnedNames
+  )
+)
 
 function parseStoredRatio(raw: string | null): number | null {
   if (!raw) return null
@@ -329,7 +349,28 @@ watch(
   () => selectedPluginName.value,
   (name) => {
     if (!name) return
-    cache.prefetch(name)
+    configCache.prefetch(name)
+  }
+)
+
+watch(
+  pluginStateSnapshot,
+  (nextSnapshot) => {
+    previousPluginState.value.forEach((previousState, name) => {
+      if (nextSnapshot.get(name) !== previousState) {
+        pageMetadataCache.invalidate(name)
+      }
+    })
+    previousPluginState.value = nextSnapshot
+  },
+  { immediate: true }
+)
+
+watch(
+  pluginWebUIPrefetchNames,
+  (names) => {
+    if (names.length === 0) return
+    void pageMetadataCache.prefetchMany(names)
   }
 )
 
@@ -370,6 +411,65 @@ const handleActionOpenReadme = (plugin: PluginSummary) => {
   emit('action-open-readme', plugin)
 }
 
+const invalidatePluginPageMetadata = (name?: string | null) => {
+  if (!name) return
+  pageMetadataCache.invalidate(name)
+}
+
+const invalidatePluginPageMetadataForPlugins = (plugins: PluginSummary[]) => {
+  plugins.forEach((plugin) => invalidatePluginPageMetadata(plugin?.name))
+}
+
+const handleActionEnable = (plugin: PluginSummary) => {
+  invalidatePluginPageMetadata(plugin?.name)
+  emit('action-enable', plugin)
+}
+
+const handleActionDisable = (plugin: PluginSummary) => {
+  invalidatePluginPageMetadata(plugin?.name)
+  emit('action-disable', plugin)
+}
+
+const handleActionReload = (name: string) => {
+  invalidatePluginPageMetadata(name)
+  emit('action-reload', name)
+}
+
+const handleActionUpdate = (name: string) => {
+  invalidatePluginPageMetadata(name)
+  emit('action-update', name)
+}
+
+const handleActionUninstall = (name: string) => {
+  invalidatePluginPageMetadata(name)
+  emit('action-uninstall', name)
+}
+
+const handleBatchEnable = (plugins: PluginSummary[]) => {
+  invalidatePluginPageMetadataForPlugins(plugins)
+  emit('batch-enable', plugins)
+}
+
+const handleBatchDisable = (plugins: PluginSummary[]) => {
+  invalidatePluginPageMetadataForPlugins(plugins)
+  emit('batch-disable', plugins)
+}
+
+const handleBatchUpdate = (names: string[]) => {
+  names.forEach(invalidatePluginPageMetadata)
+  emit('batch-update', names)
+}
+
+const handleBatchUninstall = (names: string[]) => {
+  names.forEach(invalidatePluginPageMetadata)
+  emit('batch-uninstall', names)
+}
+
+const handleUpdateAll = () => {
+  pageMetadataCache.clear()
+  emit('update-all')
+}
+
 const handleToggleShowReserved = () => {
   emit('update:showReserved', !props.showReserved)
 }
@@ -389,7 +489,7 @@ const handleToggleShowReserved = () => {
         @update:search="emit('update:search', $event)"
         @toggle-show-reserved="handleToggleShowReserved"
         @install="emit('install')"
-        @update-all="emit('update-all')"
+        @update-all="handleUpdateAll"
       />
     </div>
 
@@ -411,17 +511,17 @@ const handleToggleShowReserved = () => {
               @select-plugin="handleSelectPlugin"
               @update:selectedInactive="selectedInactiveNames = $event"
               @update:selectedActive="selectedActiveNames = $event"
-              @action-enable="emit('action-enable', $event)"
-              @action-disable="emit('action-disable', $event)"
-              @batch-enable="emit('batch-enable', $event)"
-              @batch-disable="emit('batch-disable', $event)"
-              @batch-update="emit('batch-update', $event)"
-              @batch-uninstall="emit('batch-uninstall', $event)"
+              @action-enable="handleActionEnable"
+              @action-disable="handleActionDisable"
+              @batch-enable="handleBatchEnable"
+              @batch-disable="handleBatchDisable"
+              @batch-update="handleBatchUpdate"
+              @batch-uninstall="handleBatchUninstall"
               @action-configure="handleActionConfigure"
               @action-open-readme="handleActionOpenReadme"
-              @action-reload="emit('action-reload', $event)"
-              @action-update="emit('action-update', $event)"
-              @action-uninstall="emit('action-uninstall', $event)"
+              @action-reload="handleActionReload"
+              @action-update="handleActionUpdate"
+              @action-uninstall="handleActionUninstall"
               @action-open-repo="emit('action-open-repo', $event)"
               @toggle-pin="emit('toggle-pin', $event)"
             />
@@ -437,7 +537,7 @@ const handleToggleShowReserved = () => {
               :show-reserved="showReserved"
               @update:splitRatio="rightPaneRatio = $event"
               @select-plugin="handleSelectPlugin"
-              @action-update="emit('action-update', $event)"
+              @action-update="handleActionUpdate"
               @config-saved="emit('config-saved', $event)"
             />
           </div>

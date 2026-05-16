@@ -434,7 +434,19 @@
             "config": "Настройки",
             "overview": "Документы",
             "changelog": "Изменения",
-            "reserved": "Расширение"
+            "pluginWebUI": "Plugin WebUI"
+        },
+        "pluginWebUI": {
+            "actions": {
+                "retry": "Повторить"
+            },
+            "empty": {
+                "title": "Этот плагин не предоставляет WebUI",
+                "subtitle": "Чтобы отобразиться здесь, плагин должен предоставить pages/<page_name>/index.html."
+            },
+            "errors": {
+                "loadFailed": "Не удалось загрузить Plugin WebUI"
+            }
         },
         "welcome": {
             "title": "Добро пожаловать в менеджер плагинов AstrBot",

@@ -34,11 +34,15 @@ const splitRatioModel = computed<number>({
 })
 
 // Detached tab state with localStorage persistence
-const validTabs: PluginPanelTab[] = ['info', 'config', 'overview', 'changelog', 'reserved']
+const validTabs: PluginPanelTab[] = ['info', 'config', 'overview', 'changelog', 'pluginWebUI']
 
 function loadDetachedTab(): PluginPanelTab | null {
   try {
     const stored = localStorage.getItem(DETACHED_TAB_KEY)
+    if (stored === 'reserved') {
+      localStorage.setItem(DETACHED_TAB_KEY, 'pluginWebUI')
+      return 'pluginWebUI'
+    }
     if (stored && validTabs.includes(stored as PluginPanelTab)) {
       return stored as PluginPanelTab
     }

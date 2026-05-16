@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import type { PluginSummary } from './types'
+import { sortPluginsByPinned } from './pluginWebUIPrefetch'
 import ResizableSplitPane from './ResizableSplitPane.vue'
 import PluginListTable from './PluginListTable.vue'
 
@@ -66,16 +67,12 @@ watch(
   { deep: true }
 )
 
-// Sort plugins: pinned first, then unpinned
-const sortByPinned = (plugins: PluginSummary[]) => {
-  if (!props.pinnedNames || props.pinnedNames.length === 0) return plugins
-  const pinned = plugins.filter(p => props.pinnedNames!.includes(p.name))
-  const unpinned = plugins.filter(p => !props.pinnedNames!.includes(p.name))
-  return [...pinned, ...unpinned]
-}
-
-const inactivePlugins = computed(() => sortByPinned((props.plugins ?? []).filter((p) => !p.activated)))
-const activePlugins = computed(() => sortByPinned((props.plugins ?? []).filter((p) => p.activated)))
+const inactivePlugins = computed(() =>
+  sortPluginsByPinned((props.plugins ?? []).filter((p) => !p.activated), props.pinnedNames)
+)
+const activePlugins = computed(() =>
+  sortPluginsByPinned((props.plugins ?? []).filter((p) => p.activated), props.pinnedNames)
+)
 
 const handleRowClick = (name: string) => emit('select-plugin', name)
 

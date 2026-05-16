@@ -439,7 +439,19 @@
       "config": "Config",
       "overview": "Docs",
       "changelog": "Changelog",
-      "reserved": "Extension"
+      "pluginWebUI": "Plugin WebUI"
+    },
+    "pluginWebUI": {
+      "actions": {
+        "retry": "Retry"
+      },
+      "empty": {
+        "title": "This plugin does not provide a WebUI",
+        "subtitle": "A plugin needs pages/<page_name>/index.html to appear here."
+      },
+      "errors": {
+        "loadFailed": "Failed to load plugin WebUI"
+      }
     },
     "welcome": {
       "title": "Welcome to AstrBot Plugin Manager",

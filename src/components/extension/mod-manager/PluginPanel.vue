@@ -9,7 +9,7 @@ import PluginConfigPanel from './PluginConfigPanel.vue'
 import PluginOverviewPanel from './PluginOverviewPanel.vue'
 import PluginChangelogPanel from './PluginChangelogPanel.vue'
 import PluginWelcomePanel from './PluginWelcomePanel.vue'
-import GlobalPanel from './GlobalPanel.vue'
+import PluginWebUIPanel from './PluginWebUIPanel.vue'
 
 const props = defineProps<{
   plugin: PluginSummary | null
@@ -33,7 +33,7 @@ const allTabs: { value: PluginPanelTab; labelKey: string }[] = [
   { value: 'config', labelKey: 'modManager.panelTabs.config' },
   { value: 'overview', labelKey: 'modManager.panelTabs.overview' },
   { value: 'changelog', labelKey: 'modManager.panelTabs.changelog' },
-  { value: 'reserved', labelKey: 'modManager.panelTabs.reserved' },
+  { value: 'pluginWebUI', labelKey: 'modManager.panelTabs.pluginWebUI' },
 ]
 
 // Visible tabs (excluding currently detached tab)
@@ -41,9 +41,10 @@ const visibleTabs = computed(() =>
   allTabs.filter((t) => t.value !== props.excludedTab)
 )
 
-const normalizeTab = (tab: PluginPanelTab | undefined): PluginPanelTab => {
+const normalizeTab = (tab: PluginPanelTab | 'reserved' | undefined): PluginPanelTab => {
   // Forward-compat: legacy behavior tab merged into info
   if (tab === 'behavior') return 'info'
+  if (tab === 'reserved') return 'pluginWebUI'
   const resolved = tab ?? 'info'
   // If the resolved tab is excluded, fall back to first visible
   if (resolved === props.excludedTab && visibleTabs.value.length > 0) {
@@ -283,9 +284,13 @@ watch(
           </div>
         </v-window-item>
 
-        <v-window-item v-if="excludedTab !== 'reserved'" value="reserved" class="h-100">
+        <v-window-item v-if="excludedTab !== 'pluginWebUI'" value="pluginWebUI" class="h-100">
           <div class="plugin-panel__tab">
-            <GlobalPanel />
+            <PluginWebUIPanel
+              :plugin="plugin"
+              :pluginName="pluginName"
+              :active="isTabActive('pluginWebUI')"
+            />
           </div>
         </v-window-item>
       </v-window>

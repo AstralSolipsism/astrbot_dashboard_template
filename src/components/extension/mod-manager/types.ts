@@ -41,6 +41,40 @@ export interface PluginSummary {
   logo?: string | null
 }
 
+export interface PluginPageComponent {
+  type: string
+  name?: string
+  title?: string
+  page_name?: string
+  i18n_key?: string
+  description?: string
+  plugin_name?: string
+  [key: string]: any
+}
+
+export interface PluginPageMetadataCacheEntry {
+  pluginName: string
+  plugin: Record<string, any> | null
+  components: PluginPageComponent[]
+  page: PluginPageComponent | null
+  hasPage: boolean
+  error: string
+  fetchedAt: number
+  activated?: boolean
+  version?: string
+  inFlight?: Promise<void>
+}
+
+export interface PluginPageMetadataCacheApi {
+  get(pluginName: string): PluginPageMetadataCacheEntry | undefined
+  prefetch(pluginName: string): Promise<void>
+  prefetchMany(pluginNames: string[]): Promise<void>
+  getOrFetch(pluginName: string, options?: { force?: boolean }): Promise<PluginPageMetadataCacheEntry>
+  invalidate(pluginName: string): void
+  clear(): void
+  isStale(pluginName: string): boolean
+}
+
 // 配置缓存条目
 export interface PluginConfigCacheEntry {
   metadata: Record<string, any>
@@ -63,4 +97,4 @@ export interface PluginConfigCacheApi {
 export type InstalledViewMode = 'mod' | 'legacy'
 
 // 插件面板 Tab
-export type PluginPanelTab = 'info' | 'config' | 'behavior' | 'overview' | 'changelog' | 'reserved'
+export type PluginPanelTab = 'info' | 'config' | 'behavior' | 'overview' | 'changelog' | 'pluginWebUI'

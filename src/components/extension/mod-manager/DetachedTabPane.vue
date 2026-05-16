@@ -7,7 +7,7 @@ import PluginInfoPanel from './PluginInfoPanel.vue'
 import PluginConfigPanel from './PluginConfigPanel.vue'
 import PluginOverviewPanel from './PluginOverviewPanel.vue'
 import PluginChangelogPanel from './PluginChangelogPanel.vue'
-import GlobalPanel from './GlobalPanel.vue'
+import PluginWebUIPanel from './PluginWebUIPanel.vue'
 
 const props = defineProps<{
   tab: PluginPanelTab
@@ -204,9 +204,9 @@ function onHeaderPointerDown(e: PointerEvent) {
         <PluginChangelogPanel :pluginName="pluginName" :active="true" />
       </div>
 
-      <!-- Reserved / extension area tab -->
-      <div v-else-if="tab === 'reserved'" class="detached-pane__content">
-        <GlobalPanel />
+      <!-- Plugin WebUI tab -->
+      <div v-else-if="tab === 'pluginWebUI'" class="detached-pane__content">
+        <PluginWebUIPanel :plugin="plugin" :pluginName="pluginName" :active="true" />
       </div>
     </div>
   </v-card>
