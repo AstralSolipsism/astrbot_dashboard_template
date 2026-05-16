@@ -11,7 +11,7 @@
   "license": "MIT",
   "homepage": "https://github.com/AstralSolipsism/astrbot_dashboard_template",
   "tags": ["template", "vuetify"],
-  "version": "0.1.1",
+  "version": "0.1.2",
   "compatibility": {
     "astrbot": ">=4.24.5 <4.25.0",
     "contract": "astrbot-dashboard-contract@v4.24.5"
