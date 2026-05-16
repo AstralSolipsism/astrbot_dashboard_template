@@ -11,10 +11,10 @@
   "license": "MIT",
   "homepage": "https://github.com/AstralSolipsism/astrbot_dashboard_template",
   "tags": ["template", "vuetify"],
-  "version": "0.1.2",
+  "version": "0.1.3",
   "compatibility": {
-    "astrbot": ">=4.24.5 <4.25.0",
-    "contract": "astrbot-dashboard-contract@v4.24.5"
+    "astrbot": ">=4.25.0 <4.26.0",
+    "contract": "astrbot-dashboard-contract@v4.25.0"
   },
   "security": {
     "externalDomains": ["cdn.jsdelivr.net"],
