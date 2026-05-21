@@ -20,6 +20,7 @@ const error = ref<string | null>(null)
 
 const draftMetadata = ref<Record<string, any> | null>(null)
 const draftConfig = ref<Record<string, any> | null>(null)
+const draftI18n = ref<Record<string, any>>({})
 const originalConfig = ref<Record<string, any> | null>(null)
 
 const isDirty = computed(() => {
@@ -44,9 +45,11 @@ async function loadFromCache() {
     const entry = await cache.getOrFetch(props.pluginName)
     const configClone = deepClone(entry.config || {})
     const metadataClone = deepClone(entry.metadata || {})
+    const i18nClone = deepClone(entry.i18n || {})
     draftConfig.value = configClone
     originalConfig.value = deepClone(configClone)
     draftMetadata.value = metadataClone
+    draftI18n.value = i18nClone
   } catch (err: any) {
     const message = err?.message || String(err)
     error.value = message
@@ -96,6 +99,7 @@ watch(
     } else {
       draftMetadata.value = null
       draftConfig.value = null
+      draftI18n.value = {}
       originalConfig.value = null
       error.value = null
       loading.value = false
@@ -149,6 +153,8 @@ watch(
             :metadata="draftMetadata"
             :iterable="draftConfig"
             :metadataKey="pluginName"
+            :pluginName="pluginName"
+            :pluginI18n="draftI18n"
             :is-editing="true"
           />
         </div>

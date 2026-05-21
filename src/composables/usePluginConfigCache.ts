@@ -17,6 +17,7 @@ function now() {
 type PluginConfigGetPayload = {
   metadata: Record<string, any>
   config: Record<string, any>
+  i18n: Record<string, any>
 }
 
 type PluginConfigGetResponse = ApiResponse<PluginConfigGetPayload>
@@ -38,7 +39,8 @@ async function fetchPluginConfig(pluginName: string): Promise<PluginConfigGetPay
   const payload = response.data.data
   return {
     metadata: deepClone(payload?.metadata || {}),
-    config: deepClone(payload?.config || {})
+    config: deepClone(payload?.config || {}),
+    i18n: deepClone(payload?.i18n || {})
   }
 }
 
@@ -62,6 +64,7 @@ function ensureEntry(pluginName: string): PluginConfigCacheEntry {
   const entry: PluginConfigCacheEntry = {
     metadata: {},
     config: {},
+    i18n: {},
     fetchedAt: 0
   }
   cache.set(pluginName, entry)
@@ -80,6 +83,7 @@ function startRefresh(pluginName: string, entry: PluginConfigCacheEntry) {
     const payload = await fetchPluginConfig(pluginName)
     entry.metadata = payload.metadata
     entry.config = payload.config
+    entry.i18n = payload.i18n
     entry.fetchedAt = now()
   })()
 

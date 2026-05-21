@@ -80,3 +80,19 @@ test('PluginWebUIPanel consumes metadata cache instead of fetching detail direct
   assert.doesNotMatch(panel, /from ['"]axios['"]/);
   assert.doesNotMatch(panel, /\/api\/plugin\/detail/);
 });
+
+test('inline plugin config panel preserves and passes plugin i18n metadata', () => {
+  const configCache = read('../src/composables/usePluginConfigCache.ts');
+  const configPanel = read('../src/components/extension/mod-manager/PluginConfigPanel.vue');
+  const types = read('../src/components/extension/mod-manager/types.ts');
+
+  assert.match(types, /i18n:\s*Record<string,\s*any>/);
+  assert.match(configCache, /i18n:\s*Record<string,\s*any>/);
+  assert.match(configCache, /i18n:\s*deepClone\(payload\?\.i18n \|\| \{\}\)/);
+  assert.match(configCache, /entry\.i18n\s*=\s*payload\.i18n/);
+  assert.match(configPanel, /const draftI18n = ref<Record<string,\s*any>>\(\{\}\)/);
+  assert.match(configPanel, /const i18nClone = deepClone\(entry\.i18n \|\| \{\}\)/);
+  assert.match(configPanel, /draftI18n\.value = i18nClone/);
+  assert.match(configPanel, /:pluginName="pluginName"/);
+  assert.match(configPanel, /:pluginI18n="draftI18n"/);
+});

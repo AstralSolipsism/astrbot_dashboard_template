@@ -79,6 +79,7 @@ export interface PluginPageMetadataCacheApi {
 export interface PluginConfigCacheEntry {
   metadata: Record<string, any>
   config: Record<string, any>
+  i18n: Record<string, any>
   fetchedAt: number
   inFlight?: Promise<void>
 }
