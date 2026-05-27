@@ -11,13 +11,13 @@
   "license": "MIT",
   "homepage": "https://github.com/AstralSolipsism/astrbot_dashboard_template",
   "tags": ["template", "vuetify"],
-  "version": "0.1.4",
+  "version": "0.1.5",
   "compatibility": {
-    "astrbot": ">=4.25.0 <4.26.0",
-    "contract": "astrbot-dashboard-contract@v4.25.0"
+    "astrbot": ">=4.25.1 <4.26.0",
+    "contract": "astrbot-dashboard-contract@v4.25.1"
   },
   "security": {
-    "externalDomains": ["cdn.jsdelivr.net"],
+    "externalDomains": ["cdn.jsdelivr.net", "fonts.googleapis.com", "fonts.gstatic.com"],
     "pluginApiDependencies": ["alkaid", "url_2_kb"]
   },
   "artifact": {
